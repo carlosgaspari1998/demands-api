@@ -1,13 +1,12 @@
 const express = require('express');
+const serverless = require('serverless-http');
+
 const app = express();
 
 // Rota GET simples
 app.get('/', (req, res) => {
-    res.send('Olá, mundo!');
+    res.json({ message: 'Olá, mundo!' });
 });
 
-// Inicie o servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+// Exporta o aplicativo Express como uma função serverless
+module.exports.handler = serverless(app);
