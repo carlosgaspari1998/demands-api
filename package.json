@@ -1,16 +1,12 @@
 {
-  "dependencies": {
-    "express": "^4.19.2"
-  },
-  "name": "demands-api",
+  "name": "api-vercel",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": ""
+  "license": "ISC"
 }
