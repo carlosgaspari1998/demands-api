@@ -1,15 +1,23 @@
-name: Deploy vercel site
+name: Deploy API to Vercel
 
 on:
   push:
-    branches: [main]
-    
+    branches:
+      - main
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: "Deployed site"
-      run: curl -X POST -d {} $prj_a6NtK3Q3Sids5QAt3kxMjgHZQ9I7
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Login to Vercel
+        run: vercel login --email carlos.henrique.gaspari@hotmail.com --DhP0GkZczGfMsKhrly2BsXVN
+
+      - name: Deploy API
+        run: vercel --prod
