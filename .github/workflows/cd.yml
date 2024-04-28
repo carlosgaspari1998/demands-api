@@ -12,4 +12,4 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: "Deployed site"
-      run: curl -X POST -d {} ${{ secrets.VERCEL_BUILD_HOOK }}
+      run: curl -X POST -d {} $prj_a6NtK3Q3Sids5QAt3kxMjgHZQ9I7
