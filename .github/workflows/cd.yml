@@ -17,7 +17,7 @@ jobs:
         run: npm install -g vercel
 
       - name: Login to Vercel
-        run: vercel login --email carlos.henrique.gaspari@hotmail.com --DhP0GkZczGfMsKhrly2BsXVN
+        run: vercel login
 
       - name: Deploy API
         run: vercel --prod
