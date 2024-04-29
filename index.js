@@ -2,12 +2,12 @@ const express = require('express');
 const mysql2 = require('mysql2');
 const app = express();
 
-const connection = mysql2.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  port: process.env.MYSQL_PORT,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
+const connection = mysql.createConnection({
+  host: 'viaduct.proxy.rlwy.net',  // Host do seu banco de dados MySQL
+  user: 'root',  // Usuário do banco de dados
+  port: 49839,
+  password: 'uoLBLTvhVAlsdpXTejdfDcJVyWNRaNqJ',  // Senha do banco de dados
+  database: 'railway'  // Nome do banco de dados
 });
 
 connection.connect((err) => {
