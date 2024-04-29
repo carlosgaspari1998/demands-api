@@ -26,4 +26,11 @@ jobs:
           MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-        run: vercel --prod
+        run: |
+          echo "MYSQL_HOST: $MYSQL_HOST"
+          echo "MYSQL_USER: $MYSQL_USER"
+          echo "MYSQL_PORT: $MYSQL_PORT"
+          echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+          echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+  
+          vercel --prod
