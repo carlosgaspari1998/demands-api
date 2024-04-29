@@ -2,7 +2,7 @@ const express = require('express');
 const mysql2 = require('mysql2');
 const app = express();
 
-const connection = mysql.createConnection({
+const connection = mysql2.createConnection({
   host: 'viaduct.proxy.rlwy.net',  // Host do seu banco de dados MySQL
   user: 'root',  // Usuário do banco de dados
   port: 49839,
