@@ -13,7 +13,8 @@ const connection = mysql2.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    console.error('Erro ao conectar ao banco de dados:', err);
+    console.error('Erro ao conectar ao banco de dados:' + connection.host + ' -  ' 
+    + connection.user + ' -  ' + connection.port + ' -  ' + connection.password + ' -  ' + connection.database + ' -  ', err);
     return;
   }
   console.log('Conexão ao banco de dados MySQL estabelecida com sucesso');
