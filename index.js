@@ -13,8 +13,7 @@ const connection = mysql2.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    console.error('Erro ao conectar ao banco de dados 22:' + connection.host +  ' -  ' 
-    + connection.user + ' -  ' + connection.port + ' -  ' + connection.password + ' -  ' + connection.database, err);
+    console.error('Erro ao conectar ao banco de dados', err);
     return;
   }
   console.log('Conexão ao banco de dados MySQL estabelecida com sucesso');
@@ -26,7 +25,8 @@ app.get('/users', (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) {
       console.error('Erro ao executar a consulta:', err);
-      res.status(500).send('Erro ao buscar usuários');
+      res.status(500).send('Erro ao buscar usuários'  + connection.host +  ' -  ' 
+      + connection.user + ' -  ' + connection.port + ' -  ' + connection.password + ' -  ' + connection.database);
       return;
     }
 
