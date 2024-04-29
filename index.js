@@ -24,8 +24,7 @@ app.get('/users', (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) {
       console.error('Erro ao executar a consulta:', err);
-      res.status(500).send('Erro ao buscar usuários'  + connection.host +  ' -  ' 
-      + connection.user + ' -  ' + connection.port + ' -  ' + connection.password + ' -  ' + connection.database);
+      res.status(500).send('Erro ao buscar usuários - 2' + process.env.MYSQL_HOST);
       return;
     }
 
