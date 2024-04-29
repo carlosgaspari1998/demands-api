@@ -1,9 +1,15 @@
-import globals from "globals";
 import pluginJs from "@eslint/js";
 
 export default [
-  {files: ["**/*.js"], languageOptions: {sourceType: "commonjs"}},
-  {languageOptions: { globals: globals.browser }},
-  {globals: {  process: true }},
+  { 
+    files: ["**/*.js"], 
+    languageOptions: { 
+      sourceType: "commonjs",
+      globals: {
+        process: true,
+        console: true 
+      }
+    }
+  },
   pluginJs.configs.recommended,
 ];
