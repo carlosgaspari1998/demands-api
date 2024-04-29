@@ -25,7 +25,7 @@ app.get('/users', (req, res) => {
     if (err) {
       console.error('Erro ao executar a consulta:', err);
       res.status(500).send('Erro ao buscar usuários' + process.env.MYSQL_HOST 
-      + process.env.MYSQL_USER + process.env.MYSQL_PORT + process.env.MYSQL_PASSWORD + + process.env.MYSQL_DATABASE );
+      + process.env.MYSQL_USER + process.env.MYSQL_PORT + process.env.MYSQL_PASSWORD + process.env.MYSQL_DATABASE );
       return;
     }
 
