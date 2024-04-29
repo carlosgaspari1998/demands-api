@@ -16,7 +16,7 @@ connection.connect((err) => {
     console.error('Erro ao conectar ao banco de dados:', err);
     return;
   }
-  console.log('Conexão ao banco de dados MySQL estabelecida com sucesso');
+  console.log('Conexão ao banco de dados MySQL estabelecida com sucesso :)');
 });
 
 app.get('/users', (req, res) => {
