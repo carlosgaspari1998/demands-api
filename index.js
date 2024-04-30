@@ -19,6 +19,10 @@ connection.connect((err) => {
   console.log('Conexão ao banco de dados MySQL estabelecida com sucesso');
 });
 
+app.get('/', (req, res) => {
+  res.send('Bem-vindo à API demands!');
+});
+
 app.get('/users', (req, res) => {
   const sql = 'SELECT * FROM users';
   connection.query(sql, (err, results) => {
