@@ -97,7 +97,7 @@ app.put('/products/:id', (req, res) => {
 app.delete('/products/:id', (req, res) => {
   const productId = req.params.id;
   const sql = 'UPDATE products SET removed = 1 WHERE id = ?';
-  connection.query(sql, [productId], (err, result) => {
+  connection.query(sql, [productId], (err) => {
     if (err) {
       console.error('Erro ao remover o produto:', err);
       res.status(500).json({ error: 'Erro ao remover o produto' }); // Retornando um JSON com erro
