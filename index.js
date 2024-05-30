@@ -34,7 +34,7 @@ app.post('/products', (req, res) => {
   const { name, description } = req.body;
   const id = generateCustomId();
   const sql = 'INSERT INTO products (name, description, id) VALUES (?, ?, ?)';
-  connection.query(sql, [name, description, id], (err, result) => {
+  connection.query(sql, [name, description, id], (err) => {
     if (err) {
       console.error('Erro ao adicionar um novo produto:', err);
       res.status(500).json({ success: false, message: 'Erro ao adicionar um novo produto' });
