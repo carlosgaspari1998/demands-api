@@ -7,6 +7,13 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
+const corsOptions = {
+  origin: 'https://demands.netlify.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.options('*', cors(corsOptions));
 app.use(cors())
 
 const bodyParser = require('body-parser');
