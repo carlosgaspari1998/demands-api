@@ -16,7 +16,7 @@ const app = express();
 // app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Bem-vindo à API demands!');
+  res.send('Bem-vindo à API demands!!');
 });
 
 const port = 3000;
