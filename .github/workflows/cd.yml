@@ -26,5 +26,6 @@ jobs:
           MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run:
           vercel --prod
