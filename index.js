@@ -32,19 +32,6 @@ app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!');
 });
 
-app.get('/teste', (req, res) => {
-  const sql = 'SELECT id, name, description, creation_date FROM products WHERE removed = 0';
-  connection.query(sql, (err, results) => {
-    if (err) {
-      console.error('Erro ao executar a consulta:', err);
-      res.status(500).send('Erro ao buscar produtos' + err);
-      return;
-    }
-    console.log(results + '-' + res)
-    res.json(results);
-  });
-});
-
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
 
