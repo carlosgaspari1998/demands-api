@@ -6,14 +6,14 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
+// app.use(cors());
+// app.use(bodyParser.json());
 
-const userRoutes = require('./routes/userRoutes');
-const productRoutes = require('./routes/productRoutes');
+// const userRoutes = require('./routes/userRoutes');
+// const productRoutes = require('./routes/productRoutes');
 
-app.use('/users', userRoutes);
-app.use('/products', productRoutes);
+// app.use('/users', userRoutes);
+// app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!');
