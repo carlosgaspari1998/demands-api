@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS products (
+     id CHAR(8) PRIMARY KEY,                 
+     name VARCHAR(60) NOT NULL,              
+     description VARCHAR(150),               
+     removed BIT NOT NULL DEFAULT 0,         
+     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id CHAR(8) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
