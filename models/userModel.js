@@ -2,7 +2,7 @@ const connection = require('../config/database');
 
 function findByEmail(email) {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT id FROM users WHERE email = ?';
+    const sql = 'SELECT * FROM users WHERE email = ?';
     connection.query(sql, [email], (err, results) => {
       if (err) {
         reject(err);
