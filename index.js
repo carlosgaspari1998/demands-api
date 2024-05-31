@@ -44,9 +44,8 @@ app.post('/register', (req, res) => {
     if (results.length > 0) {
       return res.status(400).json({ success: false, message: 'Email já registrado' });
     }
-
-    const hashedPassword = hashPassword(password);
     const id = generateCustomId();
+    const hashedPassword = hashPassword(password, id);
 
     const insertUserSql = 'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)';
     connection.query(insertUserSql, [id, name, email, hashedPassword], (err) => {
@@ -74,7 +73,7 @@ app.post('/login', (req, res) => {
 
     const user = results[0];
 
-    const isPasswordValid = verifyPassword(password, user.password);
+    const isPasswordValid = verifyPassword(password, user.password, user.id);
     if (!isPasswordValid) {
       return res.status(400).json({ success: false, message: 'Email ou senha inválidos' });
     }
@@ -85,12 +84,12 @@ app.post('/login', (req, res) => {
   });
 });
 
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(password).digest('hex');
+function hashPassword(password, userId) {
+  return crypto.createHash('sha256').update(userId + password).digest('hex');
 }
 
-function verifyPassword(password, hashedPassword) {
-  const hashedAttempt = hashPassword(password);
+function verifyPassword(password, hashedPassword, userId) {
+  const hashedAttempt = hashPassword(password, userId);
   return hashedAttempt === hashedPassword;
 }
 
