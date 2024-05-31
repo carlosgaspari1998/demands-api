@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-//const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const app = express();
@@ -31,8 +31,8 @@ connection.connect((err) => {
 app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!');
 });
-/*
-app.post('/register', async (req, res) => {
+
+app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
 
   const emailCheckSql = 'SELECT * FROM users WHERE email = ?';
@@ -45,7 +45,7 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email já registrado' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = hashPassword(password);
     const id = generateCustomId();
 
     const insertUserSql = 'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)';
@@ -74,7 +74,7 @@ app.post('/login', (req, res) => {
 
     const user = results[0];
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = verifyPassword(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ success: false, message: 'Email ou senha inválidos' });
     }
@@ -85,6 +85,14 @@ app.post('/login', (req, res) => {
   });
 });
 
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
+
+function verifyPassword(password, hashedPassword) {
+  const hashedAttempt = hashPassword(password);
+  return hashedAttempt === hashedPassword;
+}
 
 app.get('/products', authenticateToken, (res) => {
   const sql = 'SELECT id, name, description, creation_date FROM products WHERE removed = 0';
@@ -191,7 +199,7 @@ function generateCustomId() {
       customId += characters.charAt(randomIndex);
   }
   return customId;
-}*/
+}
 
 const port = 3000;
 app.listen(port, () => {
