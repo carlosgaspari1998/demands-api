@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-const cors = require('cors');
 const corsOptions ={
     origin:'https://demands.netlify.app', 
     credentials:true,
