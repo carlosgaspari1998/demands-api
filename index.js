@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -30,22 +32,61 @@ app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!');
 });
 
-app.post('/products', (req, res) => {
-  const { name, description } = req.body;
-  const id = generateCustomId();
-  const sql = 'INSERT INTO products (name, description, id) VALUES (?, ?, ?)';
-  connection.query(sql, [name, description, id], (err) => {
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const emailCheckSql = 'SELECT * FROM users WHERE email = ?';
+  connection.query(emailCheckSql, [email], async (err, results) => {
     if (err) {
-      console.error('Erro ao adicionar um novo produto:', err);
-      res.status(500).json({ success: false, message: 'Erro ao adicionar um novo produto' });
-      return;
+      console.error('Erro ao verificar o email:', err);
+      return res.status(500).json({ success: false, message: 'Erro no servidor' });
     }
-    res.status(201).json({ success: true, message: 'Produto adicionado com sucesso' });
+    if (results.length > 0) {
+      return res.status(400).json({ success: false, message: 'Email já registrado' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const id = generateCustomId();
+
+    const insertUserSql = 'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)';
+    connection.query(insertUserSql, [id, name, email, hashedPassword], (err) => {
+      if (err) {
+        console.error('Erro ao registrar o usuário:', err);
+        return res.status(500).json({ success: false, message: 'Erro ao registrar o usuário' });
+      }
+      res.status(201).json({ success: true, message: 'Usuário registrado com sucesso' });
+    });
+  });
+});
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  const getUserSql = 'SELECT * FROM users WHERE email = ?';
+  connection.query(getUserSql, [email], async (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o usuário:', err);
+      return res.status(500).json({ success: false, message: 'Erro no servidor' });
+    }
+    if (results.length === 0) {
+      return res.status(400).json({ success: false, message: 'Email ou senha inválidos' });
+    }
+
+    const user = results[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ success: false, message: 'Email ou senha inválidos' });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '5h' });
+
+    res.json({ success: true, token });
   });
 });
 
 
-app.get('/products', (req, res) => {
+app.get('/products', authenticateToken, (res) => {
   const sql = 'SELECT id, name, description, creation_date FROM products WHERE removed = 0';
   connection.query(sql, (err, results) => {
     if (err) {
@@ -57,7 +98,7 @@ app.get('/products', (req, res) => {
   });
 });
 
-app.get('/products/:id', (req, res) => {
+app.get('/products/:id', authenticateToken, (req, res) => {
   const productId = req.params.id;
   const sql = 'SELECT id, name, description, creation_date FROM products WHERE id = ? AND removed = 0';
   connection.query(sql, [productId], (err, results) => {
@@ -74,8 +115,21 @@ app.get('/products/:id', (req, res) => {
   });
 });
 
+app.post('/products', authenticateToken, (req, res) => {
+  const { name, description } = req.body;
+  const id = generateCustomId();
+  const sql = 'INSERT INTO products (name, description, id) VALUES (?, ?, ?)';
+  connection.query(sql, [name, description, id], (err) => {
+    if (err) {
+      console.error('Erro ao adicionar um novo produto:', err);
+      res.status(500).json({ success: false, message: 'Erro ao adicionar um novo produto' });
+      return;
+    }
+    res.status(201).json({ success: true, message: 'Produto adicionado com sucesso' });
+  });
+});
 
-app.put('/products/:id', (req, res) => {
+app.put('/products/:id', authenticateToken, (req, res) => {
   const productId = req.params.id;
   const { name, description } = req.body;
   const sql = 'UPDATE products SET name = ?, description = ? WHERE id = ?';
@@ -94,18 +148,39 @@ app.put('/products/:id', (req, res) => {
 });
 
 
-app.delete('/products/:id', (req, res) => {
+app.delete('/products/:id', authenticateToken, (req, res) => {
   const productId = req.params.id;
   const sql = 'UPDATE products SET removed = 1 WHERE id = ?';
   connection.query(sql, [productId], (err) => {
     if (err) {
       console.error('Erro ao remover o produto:', err);
-      res.status(500).json({ error: 'Erro ao remover o produto' }); // Retornando um JSON com erro
+      res.status(500).json({ error: 'Erro ao remover o produto' });
       return;
     }
-    res.json({ message: 'Produto removido com sucesso' }); // Retornando um JSON com sucesso
+    res.json({ message: 'Produto removido com sucesso' });
   });
 });
+
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Token não fornecido' });
+  }
+
+  const jwtToken = token.split(' ')[1];
+
+  jwt.verify(jwtToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log(err)
+      console.log(jwtToken)
+      return res.status(403).json({ success: false, message: 'Falha na autenticação do token' });
+    }
+  
+    req.userId = decoded.userId;
+    next();
+  });
+}
 
 function generateCustomId() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
