@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const bcrypt = require('bcrypt');
+//const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -31,7 +31,7 @@ connection.connect((err) => {
 app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!');
 });
-
+/*
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -191,7 +191,7 @@ function generateCustomId() {
       customId += characters.charAt(randomIndex);
   }
   return customId;
-}
+}*/
 
 const port = 3000;
 app.listen(port, () => {
