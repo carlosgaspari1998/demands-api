@@ -37,7 +37,7 @@ app.get('/teste', (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) {
       console.error('Erro ao executar a consulta:', err);
-      res.status(500).send('Erro ao buscar produtos');
+      res.status(500).send('Erro ao buscar produtos' + err);
       return;
     }
     console.log(results + '-' + res)
