@@ -10,10 +10,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const userRoutes = require('./routes/userRoutes');
-const productRoutes = require('./routes/productRoutes');
+const customerRoutes = require('./routes/customerRoutes');
+const demandRoutes = require('./routes/demandRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 
 app.use('/users', userRoutes);
-app.use('/products', productRoutes);
+app.use('/customers', customerRoutes);
+app.use('/demands', demandRoutes);
+app.use('/events', eventRoutes);
 
 app.get('/', (req, res) => {
   res.send('Bem-vindo à API demands!!');

@@ -1,0 +1,30 @@
+CREATE TABLE IF NOT EXISTS demands (
+    id CHAR(8) PRIMARY KEY,
+    customer_id CHAR(8) NOT NULL,
+    description VARCHAR(400) NOT NULL,
+    demand_time TIME NOT NULL,
+    removed BIT NOT NULL DEFAULT 0,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    finished BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS actions (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+INSERT INTO actions (id, name) VALUES (1, 'create');
+INSERT INTO actions (id, name) VALUES (2, 'update');
+INSERT INTO actions (id, name) VALUES (3, 'remove');
+INSERT INTO actions (id, name) VALUES (4, 'finished');
+
+CREATE TABLE IF NOT EXISTS events (
+    id CHAR(8) PRIMARY KEY,
+    demand_id CHAR(8),
+    action_id INT,
+    user_id char(8),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (demand_id) REFERENCES demands(id),
+    FOREIGN KEY (action_id) REFERENCES actions(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

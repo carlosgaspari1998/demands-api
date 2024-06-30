@@ -1,9 +1,9 @@
-CREATE TABLE IF NOT EXISTS products (
-     id CHAR(8) PRIMARY KEY,                 
-     name VARCHAR(60) NOT NULL,              
-     description VARCHAR(150),               
-     removed BIT NOT NULL DEFAULT 0,         
-     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+CREATE TABLE IF NOT EXISTS customers (
+    id CHAR(8) PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    address VARCHAR(150),
+    removed BIT NOT NULL DEFAULT 0,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS users (
