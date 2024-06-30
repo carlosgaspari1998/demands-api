@@ -9,7 +9,7 @@ function findAll(showOnlyNotFinalized) {
       SELECT d.id, c.name as customer, c.address, d.description, 
              CONVERT_TZ(d.creation_date, '+00:00', '-03:00') AS creationDate, 
              d.demand_time as demandTime, 
-             d.finished 
+             CAST(d.finished AS UNSIGNED) AS finished
       FROM demands d 
       INNER JOIN customers c ON (c.id = d.customer_id) 
       WHERE d.removed = 0 ${showOnlyNotFinalized === 'true' ? 'AND d.finished = 0' : ''} 
@@ -19,9 +19,6 @@ function findAll(showOnlyNotFinalized) {
       if (err) {
         reject(err);
       } else {
-        results.forEach(result => {
-          result.finished = result.finished === 1;
-        });
         resolve(results);
       }
     });
