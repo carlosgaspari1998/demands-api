@@ -7,8 +7,8 @@ function findAll(showOnlyNotFinalized) {
 
     const sql = `
       SELECT d.id, c.name as customer, c.address, d.description, 
-             CONVERT_TZ(d.creation_date, '+00:00', '-03:00') AS creationDate, 
-             d.demand_date as demandDate, 
+             d.creation_date AS creationDate, 
+             CONVERT_TZ(d.demand_date, '+00:00', '+03:00') as demandDate, 
              CAST(d.finished AS UNSIGNED) AS finished
       FROM demands d 
       INNER JOIN customers c ON (c.id = d.customer_id) 
