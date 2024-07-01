@@ -53,7 +53,7 @@ async function updateDemand(req, res) {
     res.json({ success: true, message: 'Pedido atualizado com sucesso' });
   } catch (error) {
     console.error('Erro ao atualizar o pedido:', error);
-    res.status(500).json({ success: false, message: 'Erro ao atualizar o pedido' });
+    res.status(500).json({ success: false, message: 'Erro ao atualizar o pedido'});
   }
 }
 
