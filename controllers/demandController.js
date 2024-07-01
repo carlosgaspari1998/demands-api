@@ -42,11 +42,11 @@ async function createDemand(req, res) {
 
 async function updateDemand(req, res) {
   const demandId = req.params.id;
-  const { customer, description } = req.body;
+  const { customer, description, demandDate } = req.body;
   const userId = req.userId;
 
   try {
-    const result = await demandModel.updateDemand(demandId, { customer, description, userId});
+    const result = await demandModel.updateDemand(demandId, { customer, description, demandDate, userId});
     if (result.affectedRows === 0) {
       return res.status(404).json({ success: false, message: 'Pedido não encontrado' });
     }
