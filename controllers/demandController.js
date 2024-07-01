@@ -27,12 +27,12 @@ async function getDemandById(req, res) {
 }
 
 async function createDemand(req, res) {
-  const { customer, description, demandTime } = req.body;
+  const { customer, description, demandDate } = req.body;
   const id = generateCustomId();
   const userId = req.userId;
 
   try {
-    await demandModel.createDemand({ id, customer, description, demandTime, userId });
+    await demandModel.createDemand({ id, customer, description, demandDate, userId });
     res.status(201).json({ success: true, message: 'Pedido adicionado com sucesso' });
   } catch (error) {
     console.error('Erro ao adicionar um novo pedido:', error);
@@ -42,11 +42,11 @@ async function createDemand(req, res) {
 
 async function updateDemand(req, res) {
   const demandId = req.params.id;
-  const { customer, description, demandTime } = req.body;
+  const { customer, description } = req.body;
   const userId = req.userId;
 
   try {
-    const result = await demandModel.updateDemand(demandId, { customer, description, demandTime, userId});
+    const result = await demandModel.updateDemand(demandId, { customer, description, userId});
     if (result.affectedRows === 0) {
       return res.status(404).json({ success: false, message: 'Pedido não encontrado' });
     }

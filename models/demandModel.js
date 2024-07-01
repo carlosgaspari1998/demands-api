@@ -8,12 +8,12 @@ function findAll(showOnlyNotFinalized) {
     const sql = `
       SELECT d.id, c.name as customer, c.address, d.description, 
              CONVERT_TZ(d.creation_date, '+00:00', '-03:00') AS creationDate, 
-             d.demand_time as demandTime, 
+             d.demand_date as demandDate, 
              CAST(d.finished AS UNSIGNED) AS finished
       FROM demands d 
       INNER JOIN customers c ON (c.id = d.customer_id) 
       WHERE d.removed = 0 ${showOnlyNotFinalized === 'true' ? 'AND d.finished = 0' : ''} 
-      ORDER BY d.demand_time`;
+      ORDER BY d.demand_date`;
 
     connection.query(sql, (err, results) => {
       if (err) {
@@ -28,7 +28,7 @@ function findAll(showOnlyNotFinalized) {
 
 function findById(demandId) {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT id, customer_id as customer, description, creation_date as creationDate, demand_time as demandTime FROM demands WHERE id = ? AND removed = 0';
+    const sql = 'SELECT id, customer_id as customer, description, creation_date as creationDate, demand_date as demandDate FROM demands WHERE id = ? AND removed = 0';
     connection.query(sql, [demandId], (err, results) => {
       if (err) {
         reject(err);
@@ -41,8 +41,8 @@ function findById(demandId) {
 
 function createDemand(demand) {
   return new Promise((resolve, reject) => {
-    const { id, customer, description, demandTime, userId } = demand;
-    const sqlInsert = 'INSERT INTO demands (id, customer_id, description, demand_time) VALUES (?, ?, ?, ?)';
+    const { id, customer, description, demandDate, userId } = demand;
+    const sqlInsert = 'INSERT INTO demands (id, customer_id, description, demand_date) VALUES (?, ?, ?, ?)';
     const sqlLog = 'INSERT INTO events (id, demand_id, action_id, user_id, date) VALUES (?, ?, ?, ?, NOW())';
 
     connection.beginTransaction(err => {
@@ -51,7 +51,7 @@ function createDemand(demand) {
         return;
       }
 
-      connection.query(sqlInsert, [id, customer, description, demandTime], (err, results) => {
+      connection.query(sqlInsert, [id, customer, description, demandDate], (err, results) => {
         if (err) {
           connection.rollback(() => {
             reject(err);
@@ -83,7 +83,7 @@ function createDemand(demand) {
 
 function updateDemand(demandId, demand) {
   return new Promise((resolve, reject) => {
-    const { customer, description, demandTime, userId } = demand;
+    const { customer, description, userId } = demand;
     const sql = 'UPDATE demands SET customer_id = ?, description = ?, demand_time = ? WHERE id = ?';
     connection.beginTransaction(err => {
       if (err) {
@@ -91,7 +91,7 @@ function updateDemand(demandId, demand) {
         return;
       }
       
-      connection.query(sql, [customer, description, demandTime, demandId], (err, results) => {
+      connection.query(sql, [customer, description, demandId], (err, results) => {
         if (err) {
           connection.rollback(() => {
             reject(err);

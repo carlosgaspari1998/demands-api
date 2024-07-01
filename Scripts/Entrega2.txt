@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS demands (
     id CHAR(8) PRIMARY KEY,
     customer_id CHAR(8) NOT NULL,
     description VARCHAR(400) NOT NULL,
-    demand_time TIME NOT NULL,
     removed BIT NOT NULL DEFAULT 0,
+    demand_date TIMESTAMP,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     finished BIT NOT NULL DEFAULT 0
 );
