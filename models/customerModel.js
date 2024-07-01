@@ -2,21 +2,20 @@ const connection = require('../config/database');
 
 function findAll() {
   return new Promise((resolve, reject) => {
-      const sql = `
-          SELECT id, name, address, CONVERT_TZ(creation_date, '+00:00', '-03:00') AS creationDate 
-          FROM customers 
-          WHERE removed = 0
-          ORDER BY name`;
-      connection.query(sql, (err, results) => {
-          if (err) {
-              reject(err);
-          } else {
-              resolve(results);
-          }
-      });
+    const sql = `
+      SELECT id, name, address, CONVERT_TZ(creation_date, '+00:00', '-03:00') AS creationDate 
+      FROM customers 
+      WHERE removed = 0
+      ORDER BY name`;
+    connection.query(sql, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
   });
 }
-
 
 function findById(customerId) {
   return new Promise((resolve, reject) => {

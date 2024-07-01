@@ -9,7 +9,7 @@ function findAll() {
       INNER JOIN demands d ON (l.demand_id = d.id) 
       INNER JOIN customers c ON (d.customer_id = c.id)
       INNER JOIN users u ON (u.id = l.user_id)
-      ORDER BY date desc
+      ORDER BY date DESC
     `;
     
     connection.query(sql, (err, results) => {

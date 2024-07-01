@@ -13,7 +13,7 @@ async function getAllDemands(req, res) {
 
 async function getDemandById(req, res) {
   const demandId = req.params.id;
-
+  
   try {
     const demand = await demandModel.findById(demandId);
     if (!demand) {

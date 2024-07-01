@@ -60,7 +60,7 @@ async function deleteCustomer(req, res) {
 
   try {
     await customerModel.removeCustomer(customerId);
-    res.json({ success: true, message: 'cliente removido com sucesso' });
+    res.json({ success: true, message: 'Cliente removido com sucesso' });
   } catch (error) {
     console.error('Erro ao remover o cliente:', error);
     res.status(500).json({ success: false, message: 'Erro ao remover o cliente' });

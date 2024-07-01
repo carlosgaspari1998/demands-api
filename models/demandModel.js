@@ -25,7 +25,6 @@ function findAll(showOnlyNotFinalized) {
   });
 }
 
-
 function findById(demandId) {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT id, customer_id as customer, description, creation_date as creationDate, demand_date as demandDate FROM demands WHERE id = ? AND removed = 0';
@@ -57,8 +56,8 @@ function createDemand(demand) {
             reject(err);
           });
         } else {
-          const id = generateCustomId();
-          connection.query(sqlLog, [id, demand.id, actionEnum.create, userId], (err) => {
+          const eventId = generateCustomId();
+          connection.query(sqlLog, [eventId, id, actionEnum.create, userId], (err) => {
             if (err) {
               connection.rollback(() => {
                 reject(err);
@@ -84,22 +83,22 @@ function createDemand(demand) {
 function updateDemand(demandId, demand) {
   return new Promise((resolve, reject) => {
     const { customer, description, userId } = demand;
-    const sql = 'UPDATE demands SET customer_id = ?, description = ?, demand_time = ? WHERE id = ?';
+    const sql = 'UPDATE demands SET customer_id = ?, description = ?, demand_date = ? WHERE id = ?';
     connection.beginTransaction(err => {
       if (err) {
         reject(err);
         return;
       }
       
-      connection.query(sql, [customer, description, demandId], (err, results) => {
+      connection.query(sql, [customer, description, demand.demandDate, demandId], (err, results) => {
         if (err) {
           connection.rollback(() => {
             reject(err);
           });
         } else {
-          const id = generateCustomId();
+          const eventId = generateCustomId();
           const sqlLog = 'INSERT INTO events (id, demand_id, action_id, user_id, date) VALUES (?, ?, ?, ?, NOW())';
-          connection.query(sqlLog, [id, demandId, actionEnum.update, userId], (err) => {
+          connection.query(sqlLog, [eventId, demandId, actionEnum.update, userId], (err) => {
             if (err) {
               connection.rollback(() => {
                 reject(err);
@@ -121,7 +120,6 @@ function updateDemand(demandId, demand) {
     });
   });
 }
-
 
 function removeDemand(demandId, userId) {
   return new Promise((resolve, reject) => {
@@ -138,9 +136,9 @@ function removeDemand(demandId, userId) {
             reject(err);
           });
         } else {
-          const id = generateCustomId();
+          const eventId = generateCustomId();
           const sqlLog = 'INSERT INTO events (id, demand_id, action_id, user_id, date) VALUES (?, ?, ?, ?, NOW())';
-          connection.query(sqlLog, [id, demandId, actionEnum.remove, userId], (err) => {
+          connection.query(sqlLog, [eventId, demandId, actionEnum.remove, userId], (err) => {
             if (err) {
               connection.rollback(() => {
                 reject(err);
@@ -163,7 +161,6 @@ function removeDemand(demandId, userId) {
   });
 }
 
-
 function finishedDemand(demandId, userId) {
   return new Promise((resolve, reject) => {
     const sql = 'UPDATE demands SET finished = 1 WHERE id = ?';
@@ -179,9 +176,9 @@ function finishedDemand(demandId, userId) {
             reject(err);
           });
         } else {
-          const id = generateCustomId();
+          const eventId = generateCustomId();
           const sqlLog = 'INSERT INTO events (id, demand_id, action_id, user_id, date) VALUES (?, ?, ?, ?, NOW())';
-          connection.query(sqlLog, [id, demandId, actionEnum.finished, userId], (err) => {
+          connection.query(sqlLog, [eventId, demandId, actionEnum.finished, userId], (err) => {
             if (err) {
               connection.rollback(() => {
                 reject(err);
